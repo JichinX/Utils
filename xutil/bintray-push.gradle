@@ -1,0 +1,80 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+def versionTag = '1.0.0'
+def packageName = "widget"
+def siteUrl = 'http://www.xujichang.me'
+def gitUrl = 'https://git.oschina.net/Sir_XU/Tools'
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                version versionTag
+                packaging 'aar'
+                name 'gradle aar example'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'xujichang'
+                        name 'xujichang'
+                        email 'xujichang@outlook.com'
+                    }
+                }
+                scm {
+                    connection siteUrl
+                    developerConnection siteUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+bintray {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    publications = ['poms']
+    pkg {
+        repo = "Tool"
+        name = packageName
+        licenses = ['Apache-2.0']
+        vcsUrl = gitUrl
+        version {
+            name = versionTag
+            desc = 'Gradle Bintray Plugin 1.0 final'
+            vcsTag = versionTag
+            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
+            gpg {
+                sign = true
+                passphrase = properties.getProperty("bintray.gpg.password")
+            }
+        }
+    }
+}
