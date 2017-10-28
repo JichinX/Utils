@@ -3,7 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = 'me.xujichang.lib'
-version = '1.0.0'
+version = '1.0.1'
 def packageName = "xutil"
 def pomConfig = {
     licenses {
@@ -20,7 +20,7 @@ def pomConfig = {
         }
     }
     scm {
-        url "https://git.oschina.net/Sir_XU/Tools"
+        url "https://github.com/xujichang/Utils"
     }
 }
 task androidJavadocs(type: Javadoc) {
@@ -51,7 +51,7 @@ publishing {
                 def root = asNode()
                 root.appendNode('description', 'test')
                 root.appendNode('name', 'test')
-                root.appendNode('url', 'https://git.oschina.net/Sir_XU/Tools')
+                root.appendNode('url', 'https://github.com/xujichang/Utils')
                 def dependenciesNode = root.appendNode("dependencies")
                 configurations.compile.allDependencies.each {//添加dependency
                     if (it.group != null) {
@@ -80,7 +80,7 @@ bintray {
             released = new Date()
             vcsTag = version
             websiteUrl = "http://www.xujichang.me"
-            vcsUrl = "https://git.oschina.net/Sir_XU/Tools"
+            vcsUrl = "https://github.com/xujichang/Utils"
             licenses = ["Apache-2.0"]
             gpg {
                 sign = true

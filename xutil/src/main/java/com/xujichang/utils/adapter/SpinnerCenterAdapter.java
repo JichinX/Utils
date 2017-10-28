@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
  */
 @Deprecated
 
-public class SpinnerCenterAdapter<T> extends me.xujichang.xutil.adapter.SpinnerCenterAdapter<T> {
+public class SpinnerCenterAdapter<T> extends me.xujichang.util.adapter.SpinnerCenterAdapter<T> {
     public SpinnerCenterAdapter(@NonNull Context context, int resource) {
         super(context, resource);
     }

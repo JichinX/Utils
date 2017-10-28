@@ -5,5 +5,5 @@ package com.xujichang.utils.adapter;
  */
 @Deprecated
 
-public interface AdapterCommonListener<T> extends me.xujichang.xutil.adapter.AdapterCommonListener<T> {
+public interface AdapterCommonListener<T> extends me.xujichang.util.adapter.AdapterCommonListener<T> {
 }

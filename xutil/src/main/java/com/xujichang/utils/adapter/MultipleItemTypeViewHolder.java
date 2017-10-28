@@ -7,7 +7,7 @@ import android.view.View;
  */
 @Deprecated
 
-public abstract class MultipleItemTypeViewHolder<T> extends me.xujichang.xutil.adapter.MultipleItemTypeViewHolder<T> {
+public abstract class MultipleItemTypeViewHolder<T> extends me.xujichang.util.adapter.MultipleItemTypeViewHolder<T> {
 
 
     public MultipleItemTypeViewHolder(View itemView) {

@@ -5,7 +5,7 @@ package com.xujichang.utils.retrofit;
  * Created by xujichang on 2017/4/13.
  */
 @Deprecated
-public class RetrofitManager extends me.xujichang.xutil.retrofit.RetrofitManager {
+public class RetrofitManager extends me.xujichang.util.retrofit.RetrofitManager {
     private RetrofitManager() {
         super("");
     }

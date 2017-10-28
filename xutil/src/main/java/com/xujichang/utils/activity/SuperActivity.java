@@ -8,5 +8,5 @@ package com.xujichang.utils.activity;
  */
 @Deprecated
 
-public abstract class SuperActivity extends me.xujichang.xutil.activity.SuperActivity{
+public abstract class SuperActivity extends me.xujichang.util.activity.SuperActivity{
 }

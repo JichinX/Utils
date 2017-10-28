@@ -6,5 +6,5 @@ package com.xujichang.utils.adapter;
  */
 @Deprecated
 
-public interface AdapterItemWithSubClickListener<T, V> extends me.xujichang.xutil.adapter.AdapterItemWithSubClickListener<T, V> {
+public interface AdapterItemWithSubClickListener<T, V> extends me.xujichang.util.adapter.AdapterItemWithSubClickListener<T, V> {
 }

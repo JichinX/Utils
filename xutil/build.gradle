@@ -53,6 +53,6 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:commons:0.9.4.5'
     testImplementation 'junit:junit:4.12'
 }
-apply from: './maven-push.gradle'
-//apply from: './jcenter-push.gradle'
+//apply from: './maven-push.gradle'
+apply from: './jcenter-push.gradle'
 //apply from: './bintray-push.gradle'

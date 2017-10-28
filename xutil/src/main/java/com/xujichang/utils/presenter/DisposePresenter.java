@@ -5,6 +5,6 @@ package com.xujichang.utils.presenter;
  * Created by xjc on 2017/6/13.
  */
 @Deprecated
-public abstract class DisposePresenter extends me.xujichang.xutil.presenter.DisposePresenter {
+public abstract class DisposePresenter extends me.xujichang.util.presenter.DisposePresenter {
 
 }

@@ -6,5 +6,5 @@ package com.xujichang.utils.tool;
  * Created by xjc on 2017/6/10.
  */
 @Deprecated
-public class LocationTool extends me.xujichang.xutil.tool.LocationTool {
+public class LocationTool extends me.xujichang.util.tool.LocationTool {
 }
