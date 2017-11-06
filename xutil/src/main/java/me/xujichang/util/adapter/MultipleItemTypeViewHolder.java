@@ -5,7 +5,7 @@ import android.view.View;
 import me.xujichang.util.simple.SimpleViewHolder;
 
 
-/**
+/**@author xjc
  * Created by xjc on 2017/6/2.
  */
 

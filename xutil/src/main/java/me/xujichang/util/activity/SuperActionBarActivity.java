@@ -14,6 +14,7 @@ import android.widget.TextView;
 import me.xujichang.util.R;
 
 /**
+ * @author xjc
  * Created by xjc on 2017/6/23.
  */
 
@@ -66,34 +67,22 @@ public class SuperActionBarActivity extends LifecycleActivity implements View.On
     }
 
     private LinearLayout actionBar;
-    //    private boolean showStatusBar = false;
     private ViewGroup root;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-//            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
-//            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
-//            showStatusBar = true;
-//        }
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_layout_root);
     }
 
     @Override
     public void setContentView(View view) {
-        root = (ViewGroup)findViewById(R.id.activity_layout_root);
+        root = (ViewGroup) findViewById(R.id.activity_layout_root);
         View rootContainer = findViewById(R.id.activity_layout_root_container);
         if (null != root) {
             root.addView(view, LinearLayout.LayoutParams.MATCH_PARENT,
-                         LinearLayout.LayoutParams.MATCH_PARENT);
-            actionBar = (LinearLayout)rootContainer.findViewById(R.id.activity_actionbar);
-            LinearLayout statusBar = (LinearLayout)rootContainer.findViewById(R.id.status_bar);
-//            if (showStatusBar) {
-//                statusBar.setVisibility(View.VISIBLE);
-//                ViewGroup.LayoutParams params = statusBar.getLayoutParams();
-//                params.height = DisplayTool.getStatusBarHeight(getBaseContext());
-//            }
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            actionBar = (LinearLayout) rootContainer.findViewById(R.id.activity_actionbar);
             initBaseActionBar(actionBar);
         }
     }
@@ -103,11 +92,11 @@ public class SuperActionBarActivity extends LifecycleActivity implements View.On
             return;
         }
         //获取控件
-        actionbarRightImg = (ImageView)actionBar.findViewById(R.id.actionbar_right_img);
-        actionbarRightText = (TextView)actionBar.findViewById(R.id.actionbar_right_text);
-        actionbarTitle = (TextView)actionBar.findViewById(R.id.actionbar_title);
-        actionbarLeftText = (TextView)actionBar.findViewById(R.id.actionbar_left_text);
-        actionbarLeftImg = (ImageView)actionBar.findViewById(R.id.actionbar_left_img);
+        actionbarRightImg = (ImageView) actionBar.findViewById(R.id.actionbar_right_img);
+        actionbarRightText = (TextView) actionBar.findViewById(R.id.actionbar_right_text);
+        actionbarTitle = (TextView) actionBar.findViewById(R.id.actionbar_title);
+        actionbarLeftText = (TextView) actionBar.findViewById(R.id.actionbar_left_text);
+        actionbarLeftImg = (ImageView) actionBar.findViewById(R.id.actionbar_left_img);
     }
 
     @Override
@@ -117,8 +106,8 @@ public class SuperActionBarActivity extends LifecycleActivity implements View.On
 
     /**
      * 设置Title
-     * @param title
-     *     title
+     *
+     * @param title title
      */
     protected void setActionBarTitle(String title) {
         if (TextUtils.isEmpty(title)) {
@@ -141,11 +130,11 @@ public class SuperActionBarActivity extends LifecycleActivity implements View.On
 
     private void keepBalance() {
         if (actionbarLeftImg.getVisibility() == View.VISIBLE
-            && actionbarRightImg.getVisibility() == View.GONE) {
+                && actionbarRightImg.getVisibility() == View.GONE) {
             actionbarRightImg.setVisibility(View.INVISIBLE);
         }
         if (actionbarRightImg.getVisibility() == View.VISIBLE
-            && actionbarLeftImg.getVisibility() == View.GONE) {
+                && actionbarLeftImg.getVisibility() == View.GONE) {
             actionbarLeftImg.setVisibility(View.INVISIBLE);
         }
     }

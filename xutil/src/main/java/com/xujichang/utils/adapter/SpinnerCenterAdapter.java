@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 /**
  * Spinner 居中
+ * @author xjc
  * Created by xjc on 2017/3/17.
  */
 @Deprecated

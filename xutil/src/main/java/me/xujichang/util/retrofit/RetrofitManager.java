@@ -20,6 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * 对Retrofit做进一步封装，请求时 更方便
+ * @author xjc
  * Created by xujichang on 2017/4/13.
  */
 
@@ -28,7 +29,7 @@ public class RetrofitManager {
     public static final int TOKEN_IN_QUERY = 1;
     public static final int TOKEN_IN_HEADER = 2;
     public static final String URL_EXTEND = "extend_url";
-    private String token_key;
+    private String tokenKey;
     private static RetrofitManager ourInstance = null;
     private static Retrofit retrofit;
 
@@ -71,20 +72,25 @@ public class RetrofitManager {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.addInterceptor(new RequestCheckIntercept());
-        builder.addInterceptor(loggingInterceptor);//添加日志打印
+        //添加日志打印
+        builder.addInterceptor(loggingInterceptor);
 
-        builder.connectTimeout(15, TimeUnit.SECONDS);//连接超时 时间
+        //连接超时 时间
+        builder.connectTimeout(15, TimeUnit.SECONDS);
         builder.readTimeout(50, TimeUnit.SECONDS);
         builder.writeTimeout(50, TimeUnit.SECONDS);
-        builder.retryOnConnectionFailure(true);//重试
+        //重试
+        builder.retryOnConnectionFailure(true);
 
         OkHttpClient client = builder.build();
 
         return new Retrofit
                 .Builder()
                 .baseUrl(url)
-                .addConverterFactory(GsonConverterFactory.create())//使用Gson转换
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//使用RxJava返回格式
+                //使用Gson转换
+                .addConverterFactory(GsonConverterFactory.create())
+                //使用RxJava返回格式
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
                 .build();
     }
@@ -105,20 +111,24 @@ public class RetrofitManager {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.addInterceptor(new RequestCheckIntercept());
-        builder.addInterceptor(loggingInterceptor);//添加日志打印
-
-        builder.connectTimeout(15, TimeUnit.SECONDS);//连接超时 时间
+        //添加日志打印
+        builder.addInterceptor(loggingInterceptor);
+        //连接超时 时间
+        builder.connectTimeout(15, TimeUnit.SECONDS);
         builder.readTimeout(50, TimeUnit.SECONDS);
         builder.writeTimeout(50, TimeUnit.SECONDS);
-        builder.retryOnConnectionFailure(true);//重试
+        //重试
+        builder.retryOnConnectionFailure(true);
 
         OkHttpClient client = builder.build();
 
         retrofit = new Retrofit
                 .Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())//使用Gson转换
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//使用RxJava返回格式
+                //使用Gson转换
+                .addConverterFactory(GsonConverterFactory.create())
+                //使用RxJava返回格式
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
                 .build();
         tempRetrofit = retrofit;
@@ -147,11 +157,12 @@ public class RetrofitManager {
         HttpUrl.Builder urlBuilder = request.url().newBuilder();
         Headers.Builder headersBuilder = request.headers().newBuilder();
         //处理Token
-        if (!TextUtils.isEmpty(token)) {//如果不存在Token
+        if (!TextUtils.isEmpty(token)) {
+            //如果不存在Token
             if (tokenPos == TOKEN_IN_QUERY) {
-                urlBuilder.addQueryParameter(token_key, token);
+                urlBuilder.addQueryParameter(tokenKey, token);
             } else if (tokenPos == TOKEN_IN_HEADER) {
-                headersBuilder.add(token_key, token);
+                headersBuilder.add(tokenKey, token);
             }
         }
         //处理请求链接 主要是区别于baseUrl
@@ -182,7 +193,8 @@ public class RetrofitManager {
         builder
                 .scheme(extend.scheme())
                 .host(extend.host())
-                .port(extend.port());//替换掉"scheme://host:port"
+                .port(extend.port());
+        //替换掉"scheme://host:port"
         ArrayList<String> strings = new ArrayList<>(builder.build().pathSegments());
         try {
             for (int i = 0; i < strings.size(); i++) {
@@ -224,20 +236,20 @@ public class RetrofitManager {
             return this;
         }
 
-        public Builder tokenKey(String token_key) {
-            this.tokenKey = token_key;
+        public Builder tokenKey(String tokenKey) {
+            this.tokenKey = tokenKey;
             return this;
         }
 
-        public Builder token(String token, String token_key) {
+        public Builder token(String token, String tokenKey) {
             token(token);
-            tokenKey(token_key);
+            tokenKey(tokenKey);
             return this;
         }
 
-        public Builder token(int tokenPos, String token, String token_key) {
+        public Builder token(int tokenPos, String token, String tokenKey) {
             token(token);
-            tokenKey(token_key);
+            tokenKey(tokenKey);
             tokenPos(tokenPos);
             return this;
         }
@@ -269,7 +281,7 @@ public class RetrofitManager {
 
     private void initWithBuilder(Builder builder) {
         token = builder.token;
-        token_key = builder.tokenKey;
+        tokenKey = builder.tokenKey;
         tokenPos = builder.tokenPos;
         extendUrls = builder.extendUrlMap;
     }

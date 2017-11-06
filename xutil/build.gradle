@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.2"
 
     defaultConfig {
         minSdkVersion 16
@@ -51,8 +50,7 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0-rc1"
     //material Dialog
     implementation 'com.afollestad.material-dialogs:commons:0.9.4.5'
-    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'junit:junit:4.12'
 }
-//apply from: './maven-push.gradle'
-apply from: './jcenter-push.gradle'
-//apply from: './bintray-push.gradle'
+//apply from: 'bintray-push.gradle'
+apply from: 'https://raw.githubusercontent.com/xujichang/push_gradle/master/bintray-push.gradle'

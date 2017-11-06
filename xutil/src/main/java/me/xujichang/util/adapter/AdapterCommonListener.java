@@ -1,6 +1,6 @@
 package me.xujichang.util.adapter;
 
-/**
+/**@author xjc
  * Created by xjc on 2017/5/31.
  */
 

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
-/**
+/**@author xjc
  * Created by xjc on 2017/6/1.
  */
 

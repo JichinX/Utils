@@ -2,7 +2,7 @@ package me.xujichang.util.bean;
 
 import android.content.SharedPreferences;
 
-/**
+/**@author xjc
  * Created by xjc on 2017/6/10.
  */
 

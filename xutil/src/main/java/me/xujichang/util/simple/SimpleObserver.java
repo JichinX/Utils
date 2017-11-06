@@ -5,6 +5,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 
 /**
+ * @author xjc
  * Created by xjc on 2017/8/4。
  */
 

@@ -1,6 +1,7 @@
 package com.xujichang.utils.tool;
 
 /**
+ * @author xjc
  * Created by xjc on 2017/5/24.
  */
 @Deprecated

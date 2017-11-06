@@ -2,6 +2,7 @@ package com.xujichang.utils.retrofit;
 
 /**
  * 对Retrofit做进一步封装，请求时 更方便
+ * @author xjc
  * Created by xujichang on 2017/4/13.
  */
 @Deprecated

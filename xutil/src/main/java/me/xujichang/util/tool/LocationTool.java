@@ -10,11 +10,13 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+
 import java.lang.ref.WeakReference;
 
 /**
  * 定位
  * 包括 WIFI定位 基站定位 GPS 定位
+ * @author xjc
  * Created by xjc on 2017/6/10.
  */
 
@@ -24,7 +26,7 @@ public class LocationTool {
     private static LocationTool instance;
     private LocationManager locationManager;
     private LocalizationListener localizationListener;
-    private SelfGpsListener GpsListener;
+    private SelfGpsListener gpsListener;
     private SelfLocationListener locationListener;
 
     public static LocationTool getInstance() {
@@ -74,10 +76,11 @@ public class LocationTool {
         String serviceName = Context.LOCATION_SERVICE;
         String gpsProvider = LocationManager.GPS_PROVIDER;
         locationManager = (LocationManager) contextWeakReference.get().getSystemService(serviceName);
-        Location location = locationManager.getLastKnownLocation(gpsProvider); // 通过GPS获取位置
+        // 通过GPS获取位置
+        Location location = locationManager.getLastKnownLocation(gpsProvider);
         updateToNewLocation(location);
-        GpsListener = new SelfGpsListener();
-        locationManager.addGpsStatusListener(GpsListener);
+        gpsListener = new SelfGpsListener();
+        locationManager.addGpsStatusListener(gpsListener);
         locationListener = new SelfLocationListener();
         // 设置监听*器，自动更新的最小时间为间隔N秒(1秒为1*1000，这样写主要为了方便)或最小位移变化超过N米
         locationManager.requestLocationUpdates(gpsProvider, 2 * 1000, 10,
@@ -105,7 +108,7 @@ public class LocationTool {
             LogTool.d("LocationListener:" + location.toString());
             if (LocationManager.GPS_PROVIDER.equals(location.getProvider())) {
                 localizationListener.onGpsLocation(location);
-                locationManager.removeGpsStatusListener(GpsListener);
+                locationManager.removeGpsStatusListener(gpsListener);
             }
 
         }
@@ -139,6 +142,8 @@ public class LocationTool {
 
         /**
          * GPS权限 被拒绝
+         *
+         * @param permissions 权限
          */
         void onGpsPermissionDenied(String[] permissions);
 
@@ -159,19 +164,34 @@ public class LocationTool {
          */
         void onGpsEnable();
 
+        /**
+         * Gps停止定位
+         */
         void onGpsStop();
 
+        /**
+         * 第一次矫正
+         */
         void onGpsFirstFix();
 
+        /**
+         * Gps开始定位
+         */
         void onGpsStart();
 
+        /**
+         * 未知改变
+         *
+         * @param status 状态
+         * @param extras 数据
+         */
         void onLocationStatusChanged(int status, Bundle extras);
     }
 
     public void onDestroy() {
         if (null != locationManager) {
-            if (null != GpsListener) {
-                locationManager.removeGpsStatusListener(GpsListener);
+            if (null != gpsListener) {
+                locationManager.removeGpsStatusListener(gpsListener);
             }
             if (null != locationListener) {
                 locationManager.removeUpdates(locationListener);
@@ -247,6 +267,7 @@ public class LocationTool {
                     localizationListener.onGpsStop();
 
                     break;
+                default:
             }
         }
     }

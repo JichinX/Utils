@@ -3,7 +3,8 @@ package me.xujichang.util.tool;
 import android.util.Log;
 
 /**
- * Created by huangjun on 2016/10/14.
+ * @author xjc
+ *         Created by huangjun on 2016/10/14.
  */
 
 public class LogTool {

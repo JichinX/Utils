@@ -2,7 +2,7 @@ package com.xujichang.utils.adapter;
 
 import android.view.View;
 
-/**
+/**@author xjc
  * Created by xjc on 2017/6/2.
  */
 @Deprecated

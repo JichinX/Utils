@@ -36,11 +36,13 @@ import okhttp3.ResponseBody;
 
 /**
  * 下载管理
- * Created by xjc on 2017/5/25.
+ *
+ * @author xjc
+ *         Created by xjc on 2017/5/25.
  */
 
 public class DownLoadTool {
-
+    private static final String FILE_APK = ".apk";
     private static DownLoadTool instance;
     private String fileName;
     private File storeDir;
@@ -179,7 +181,7 @@ public class DownLoadTool {
         MDButton negativeButton =
                 progressDialog.getActionButton(DialogAction.NEGATIVE);
 
-        if (fileName.endsWith(".apk")) {
+        if (FILE_APK.endsWith(fileName)) {
             positiveButton.setVisibility(View.VISIBLE);
             positiveButton.setText("安装");
             positiveButton.setOnClickListener(new View.OnClickListener() {
@@ -195,7 +197,6 @@ public class DownLoadTool {
                     progressDialog.dismiss();
                 }
             });
-            return;
         } else {
             positiveButton.setVisibility(View.VISIBLE);
             positiveButton.setText("确定");
@@ -448,13 +449,30 @@ public class DownLoadTool {
     }
 
     public interface DownLoadStatusCallback {
-
+        /**
+         * 进度
+         *
+         * @param next
+         */
         void onNext(Integer next);
 
+        /**
+         * 开始下载
+         */
         void onStart();
 
+        /**
+         * 下载出错
+         *
+         * @param throwable 出错对象 可获取错误信息
+         */
         void onError(Throwable throwable);
 
+        /**
+         * 下载完成
+         *
+         * @param fileName 文件名
+         */
         void onComplete(String fileName);
     }
 

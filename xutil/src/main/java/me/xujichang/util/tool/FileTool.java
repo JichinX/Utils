@@ -10,7 +10,9 @@ import java.util.zip.ZipInputStream;
 
 /**
  * 文件工具
- * Created by xjc on 2017/5/26.
+ *
+ * @author xjc
+ *         Created by xjc on 2017/5/26.
  */
 
 public class FileTool {
@@ -22,20 +24,24 @@ public class FileTool {
      */
     public static void unZipFile(final File zipFile, final String path) {
         LogTool.d("unZip.....dest:" + path);
-        int BUFFER = 4096; // 这里缓冲区我们使用4KB，
-        String strEntry; // 保存每个zip的条目名称
+        // 这里缓冲区我们使用4KB，
+        int BUFFER = 4096;
+        // 保存每个zip的条目名称
+        String strEntry;
         try {
-            BufferedOutputStream dest = null; // 缓冲输出流
+            // 缓冲输出流
+            BufferedOutputStream dest = null;
             FileInputStream fis = new FileInputStream(zipFile);
             ZipInputStream zis = new ZipInputStream(
                     new BufferedInputStream(fis));
-            ZipEntry entry; // 每个zip条目的实例
+            // 每个zip条目的实例
+            ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {
                 try {
                     int count;
-                    byte data[] = new byte[BUFFER];
+                    byte[] data = new byte[BUFFER];
                     strEntry = entry.getName();
-                    File entryFile = new File(path + File.separator+strEntry);
+                    File entryFile = new File(path + File.separator + strEntry);
                     File entryDir = new File(entryFile.getParent());
                     if (!entryDir.exists()) {
                         entryDir.mkdirs();

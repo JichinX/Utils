@@ -14,13 +14,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import me.xujichang.util.base.SuperPresenter;
 import me.xujichang.util.bean.AppInfo;
 import me.xujichang.util.tool.LogTool;
@@ -30,7 +33,9 @@ import me.xujichang.util.tool.SnackBarTool;
  * SuperActivity
  * <p>
  * 包含 Loading Dialog 权限申请 ActionBar等
- * Created by xjc on 2017/5/23.
+ *
+ * @author xjc
+ *         Created by xjc on 2017/5/23.
  */
 public abstract class SuperActivity extends SuperActionBarActivity implements View.OnClickListener {
 
@@ -90,11 +95,11 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
 
     public boolean hideSoftKeyBoard() {
         boolean closed = false;
-        InputMethodManager methodManager = (InputMethodManager)getSystemService(
-            Context.INPUT_METHOD_SERVICE);
+        InputMethodManager methodManager = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
         if (null != methodManager) {
             closed = methodManager.hideSoftInputFromWindow(
-                getWindow().getDecorView().getWindowToken(), 0);
+                    getWindow().getDecorView().getWindowToken(), 0);
         }
         return closed;
     }
@@ -142,7 +147,7 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
     public void showToastWithAction(View view, String msg, View.OnClickListener listener,
                                     String actionstr) {
         SnackBarTool.getInstance().showToastWithAction(view, msg).action(actionstr, listener)
-                    .cancel(true).show();
+                .cancel(true).show();
     }
 
     public void showToastWithAction(View view, String msg, View.OnClickListener listener,
@@ -151,7 +156,7 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
             msg = msg + "(右滑删除此消息)";
         }
         SnackBarTool.getInstance().showToastWithAction(view, msg).action(actionstr, listener)
-                    .cancel(cancel).show();
+                .cancel(cancel).show();
     }
 
     public void showToastWithAction(String msg, View.OnClickListener listener, String actionstr) {
@@ -201,14 +206,14 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
     public void showWarningDialog(@NonNull String msg,
                                   MaterialDialog.SingleButtonCallback callback) {
         new MaterialDialog.Builder(this)
-            .title("警告")
-            .content(msg)
-            .positiveText("确定")
-            .negativeText("取消")
-            .onPositive(callback)
-            .cancelable(false)
-            .build()
-            .show();
+                .title("警告")
+                .content(msg)
+                .positiveText("确定")
+                .negativeText("取消")
+                .onPositive(callback)
+                .cancelable(false)
+                .build()
+                .show();
     }
 
     protected void createErrorDialog(String msg) {
@@ -229,18 +234,18 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
             return;
         }
         errorDialog = new MaterialDialog.Builder(this)
-            .title("Error")
-            .content(msg)
-            .positiveText("确定")
-            .onPositive(callback)
-            .cancelable(false)
-            .dismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    errorDialog = null;
-                }
-            })
-            .build();
+                .title("Error")
+                .content(msg)
+                .positiveText("确定")
+                .onPositive(callback)
+                .cancelable(false)
+                .dismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        errorDialog = null;
+                    }
+                })
+                .build();
         errorDialog.show();
 
     }
@@ -252,7 +257,7 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         //取消状态栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                             WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     public void toActivity(Class c) {
@@ -290,16 +295,16 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
     protected void showUpdateDialog(AppInfo appInfo, boolean must,
                                     MaterialDialog.SingleButtonCallback callback) {
         MaterialDialog dialog = new MaterialDialog
-            .Builder(this)
-            .title(appInfo.getAppName() + "可更新")
-            .content(appInfo.getContent())
-            .autoDismiss(false)
-            .cancelable(false)
-            .positiveText("更新")
-            .onPositive(callback)
-            .negativeText("取消")
-            .onNegative(callback)
-            .build();
+                .Builder(this)
+                .title(appInfo.getAppName() + "可更新")
+                .content(appInfo.getContent())
+                .autoDismiss(false)
+                .cancelable(false)
+                .positiveText("更新")
+                .onPositive(callback)
+                .negativeText("取消")
+                .onNegative(callback)
+                .build();
         if (must) {
             //隐藏掉取消按钮 强制更新
             dialog.getActionButton(DialogAction.NEGATIVE).setVisibility(View.GONE);
@@ -324,13 +329,13 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
 
     /**
      * 检测权限是否开启
-     * @param permission
-     *     需要检测的权限
+     *
+     * @param permission 需要检测的权限
      * @return 返回结果
      */
     protected boolean checkPermission(String permission) {
         return ActivityCompat.checkSelfPermission(this, permission)
-            == PackageManager.PERMISSION_GRANTED;
+                == PackageManager.PERMISSION_GRANTED;
     }
 
     public void requestPermission(String[] permissions, int requestCode) {
@@ -348,8 +353,18 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
 
     }
 
+    /**
+     * 首页双击退出的判断间隔
+     *
+     * @return 间隔时间段
+     */
     protected abstract long getActivityExitDuration();
 
+    /**
+     * 首页 类名字
+     *
+     * @return 类的名称
+     */
     protected abstract String getMainActivityName();
 
     protected void onParentBackPressed() {

@@ -1,0 +1,28 @@
+ext {
+    pkg = [
+            desc   : '开发过程中的工具类',
+            site   : 'https://github.com/xujichang/Utils',
+            issue  : 'https://github.com/xujichang/Utils/issues',
+            gitRepo: 'xujichang/Utils',
+            repo   : 'Tool',
+            name   : 'xutil',
+            vcs    : 'https://github.com/xujichang/Utils.git'
+    ]
+    developer = [
+            id   : 'me.xujichang',
+            name : 'xujichang',
+            email: 'xujichang@outlook.com',
+            blog : 'xujichang.me'
+    ]
+    versions = [
+            name: '1.0.2',
+            desc: '更新编译工具的版本',
+            tag : '1.0.2',
+    ]
+    maven = [
+            path      : '',
+            version   : '',
+            groupId   : '',
+            artifactId: ''
+    ]
+}

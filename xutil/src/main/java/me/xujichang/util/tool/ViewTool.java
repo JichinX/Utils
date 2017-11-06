@@ -1,11 +1,13 @@
 package me.xujichang.util.tool;
 
 
+import android.app.Activity;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.Lifecycle.Event;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -20,8 +22,8 @@ import java.util.concurrent.TimeUnit;
 import me.xujichang.util.simple.SimpleObserver;
 
 /**
- * Created by xjc on 2017/8/4。
- *
+ * @author xjc
+ *         Created by xjc on 2017/8/4。
  */
 
 public class ViewTool {
@@ -79,7 +81,7 @@ public class ViewTool {
      */
     public <T extends View> void proxyClickListener(final T view,
                                                     final XOnClickListener<T> listener,
-                                                    int seconds) {
+                                                    long seconds) {
         XObservableOnSubscribe<T> subscribe = new XObservableOnSubscribe<T>(view) {
             @Override
             protected void subscribe(final ObservableEmitter<T> e, final T view) {
@@ -99,13 +101,13 @@ public class ViewTool {
         };
         Observable
                 .create(subscribe)
-                .throttleFirst(seconds, TimeUnit.SECONDS)
+                .throttleFirst(seconds, TimeUnit.MILLISECONDS)
                 .subscribe(observer);
     }
 
     public <T extends View> void proxyClickListener(final T view,
                                                     final XOnClickListener<T> listener) {
-        proxyClickListener(view, listener, 1);
+        proxyClickListener(view, listener, 500);
     }
 
     abstract static class XObservableOnSubscribe<T extends View>
@@ -122,6 +124,12 @@ public class ViewTool {
             subscribe(e, view);
         }
 
+        /**
+         * 订阅事件
+         *
+         * @param e
+         * @param view
+         */
         protected abstract void subscribe(ObservableEmitter<T> e, T view);
 
     }
@@ -130,7 +138,11 @@ public class ViewTool {
      * @param <T>
      */
     public interface XOnClickListener<T extends View> {
-
+        /**
+         * 点击事件
+         *
+         * @param view
+         */
         void onClick(T view);
     }
 
@@ -172,26 +184,50 @@ public class ViewTool {
         }
     }
 
+    /**
+     * 将Lifecycle的生命周期事件
+     * 转换成方法  方便使用
+     */
     public static abstract class XLifeCycleObserver implements LifecycleObserver {
-
+        /**
+         * 对应Activity的生命周期{@link Activity#onStart()}
+         */
         @OnLifecycleEvent(Event.ON_START)
         public abstract void onStart();
 
+        /**
+         * 对应Activity的生命周期{@link Activity#onStart()}
+         */
         @OnLifecycleEvent(Event.ON_STOP)
         public abstract void onStop();
 
+        /**
+         * 对应Activity的生命周期{@link Activity#onResume()} ()}
+         */
         @OnLifecycleEvent(Event.ON_RESUME)
         public abstract void onResume();
 
+        /**
+         * 对应Activity的生命周期{@link Activity#onPause()} ()}
+         */
         @OnLifecycleEvent(Event.ON_PAUSE)
         public abstract void onPause();
 
+        /**
+         * 对应Activity的生命周期{@link Activity#onCreate(Bundle)} ()}
+         */
         @OnLifecycleEvent(Event.ON_CREATE)
         public abstract void onCreate();
 
+        /**
+         * 对应Activity的生命周期{@link Activity#onDestroy()} ()}
+         */
         @OnLifecycleEvent(Event.ON_DESTROY)
         public abstract void onDestroy();
 
+        /**
+         * 对应Activity的生命周期的每个变化都会响应
+         */
         @OnLifecycleEvent(Event.ON_ANY)
         public abstract void onChange();
     }

@@ -17,7 +17,9 @@ import java.util.List;
 
 /**
  * Spinner 居中
- * Created by xjc on 2017/3/17.
+ *
+ * @author xjc
+ *         Created by xjc on 2017/3/17.
  */
 
 public class SpinnerCenterAdapter<T> extends ArrayAdapter<T> {

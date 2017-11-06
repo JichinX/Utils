@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Base64;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -15,7 +16,8 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Created by xjc on 2017/5/24.
+ * @author xjc
+ *         Created by xjc on 2017/5/24.
  */
 
 public class StringTool {
@@ -74,8 +76,8 @@ public class StringTool {
      * @param query
      */
     public static Map<String, String> parseQuery2Map(String query) {
-        Map<String, String> queryMap = new HashMap<>();
         String[] strings = query.split("&");
+        Map<String, String> queryMap = new HashMap<>(strings.length);
         for (String string : strings) {
             String[] sub = string.split("=");
             if (sub.length > 1) {
@@ -89,13 +91,16 @@ public class StringTool {
         // MessageDigest专门用于加密的类
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            byte[] result = messageDigest.digest(val.getBytes()); // 得到加密后的字符组数
+            // 得到加密后的字符组数
+            byte[] result = messageDigest.digest(val.getBytes());
 
             StringBuffer sb = new StringBuffer();
 
             for (byte b : result) {
-                int num = b & 0xff; // 这里的是为了将原本是byte型的数向上提升为int型，从而使得原本的负数转为了正数
-                String hex = Integer.toHexString(num); //这里将int型的数直接转换成16进制表示
+                // 这里的是为了将原本是byte型的数向上提升为int型，从而使得原本的负数转为了正数
+                int num = b & 0xff;
+                //这里将int型的数直接转换成16进制表示
+                String hex = Integer.toHexString(num);
                 //16进制可能是为1的长度，这种情况下，需要在前面补0，
                 if (hex.length() == 1) {
                     sb.append(0);
@@ -119,18 +124,18 @@ public class StringTool {
     }
 
     public static String getGender(int xb) {
-        String XB = "未知";
+        String xbStr = "未知";
         switch (xb) {
             case 1:
-                XB = "男";
+                xbStr = "男";
                 break;
             case 2:
-                XB = "女";
+                xbStr = "女";
                 break;
             default:
-                XB = "未知性别";
+                xbStr = "未知性别";
         }
-        return XB;
+        return xbStr;
     }
 
     public static String convertArray2String(ArrayList<Integer> houseIds) {
