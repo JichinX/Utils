@@ -1,0 +1,194 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+//apply plugin: 'maven'
+apply plugin: 'maven-publish'
+//lib
+def libGroup = lib.groupId
+def libArtifactId = lib.artifactId
+//pkg
+def pkgDesc = pkg.desc
+def pkgSite = pkg.site
+def pkgIssue = pkg.issue
+def pkgGitRepo = pkg.gitRepo
+def pkgRepo = pkg.repo
+def pkgName = pkg.name
+def pkgVcs = pkg.vcs
+//developer
+def developerId = developer.id
+def developerName = developer.name
+def developerEmail = developer.email
+def developerBlog = developer.blog
+//Version
+def versionName = versions.name
+def versionDes = versions.desc
+def versionTag = versions.tag
+//localMaven
+def mavenPath = maven.path
+def mavenVersion = maven.version
+def mavenGroupId = maven.groupId
+def mavenArtifactId = maven.artifactId
+def defPom = {
+    licenses {
+        license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+        }
+    }
+    developers {
+        developer {
+            id developerId
+            name developerName
+            email developerEmail
+        }
+    }
+    scm {
+        connection developerEmail
+        developerConnection developerEmail
+        url developerBlog
+    }
+}
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+publishing {
+    publications {
+        poms(MavenPublication) {
+            artifact sourcesJar
+            artifact javadocJar
+            groupId libGroup
+            artifactId libArtifactId
+            version "1.0.2"
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', pkgDesc)
+                root.appendNode('name', pkgName)
+                root.appendNode('url', pkgVcs)
+                ArrayList<String> labels = new ArrayList<>()
+                labels.add("compile")
+                labels.add("provided")
+                labels.add("compileOnly")
+                labels.add("runtimeOnly")
+                labels.add("api")
+                labels.add("implementation")
+                def dependenciesNode = root.appendNode("dependencies")
+                SortedMap<String, Configuration> map = configurations.asMap
+                map.keySet().each {
+                    if (labels.contains(it)) {
+                        Configuration configuration = map.get(it)
+                        configuration.allDependencies.each {
+                            if (null != it.group) {
+                                def dependencyNode = dependenciesNode.appendNode('dependency')
+                                dependencyNode.appendNode('groupId', it.group)
+                                dependencyNode.appendNode('artifactId', it.name)
+                                dependencyNode.appendNode('version', it.version)
+                                dependencyNode.appendNode('scope', configuration.name)
+                            }
+                        }
+                    }
+
+                }
+                root.children().last() + defPom
+            }
+        }
+    }
+}
+bintray {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    publications = ['poms']
+    dryRun = false
+    publish = true
+    override = true
+    pkg {
+        desc = pkgDesc
+        websiteUrl = pkgSite
+        issueTrackerUrl = pkgIssue
+        publicDownloadNumbers = true
+        githubRepo = pkgGitRepo
+        githubReleaseNotesFile = 'README.md'
+        repo = "Tool"
+        name = "xutil"
+        licenses = ['Apache-2.0']
+        vcsUrl = pkgVcs
+        version {
+            name = "1.0.2"
+            desc = versionDes
+            vcsTag = "1.0.2"
+            gpg {
+                sign = true
+                passphrase = properties.getProperty("bintray.gpg.password")
+            }
+        }
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                groupId libGroup
+                artifactId libArtifactId
+                version versionTag
+                packaging 'aar'
+                name pkgDesc
+                url pkgVcs
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id developerId
+                        name developerName
+                        email developerEmail
+                    }
+                }
+                scm {
+                    connection developerEmail
+                    developerConnection developerEmail
+                    url developerBlog
+                }
+            }
+        }
+    }
+}
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            println("local_maven_path:" + mavenPath)
+//            repository(url: mavenPath)
+//            pom.version = mavenVersion
+//            pom.groupId = mavenGroupId
+//            pom.artifactId = mavenArtifactId
+//            pom.project {
+//                licenses {
+//                    license {
+//                        name 'The Apache Software License, Version 2.0'
+//                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}

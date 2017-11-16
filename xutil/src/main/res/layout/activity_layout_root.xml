@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_layout_root_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+    <!--StatusBar-->
     <LinearLayout
         android:id="@+id/status_bar"
         android:layout_width="match_parent"
-        android:layout_height="28dp"
+        android:layout_height="@dimen/status_bar_size"
         android:background="@color/colorPrimaryDark"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
         android:visibility="gone" />
-
+    <!--ActionBar-->
     <LinearLayout
         android:id="@+id/activity_actionbar"
         android:layout_width="match_parent"
@@ -70,9 +71,52 @@
             android:visibility="gone" />
 
     </LinearLayout>
-
+    <!--Container-->
     <FrameLayout
-        android:id="@+id/activity_layout_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/activity_layout_root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+        <!--提示信息-->
+        <LinearLayout
+            android:id="@+id/ll_error_float_tip"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/material_textBlack_secondaryText"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_error_type_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_error_white" />
+
+            <TextView
+                android:id="@+id/tv_error_msg"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="marquee"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                tools:text="网络连接失败，请检查网络" />
+
+            <ImageView
+                android:id="@+id/iv_error_to_repair"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:src="@drawable/ic_keyboard_arrow_right_white" />
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

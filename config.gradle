@@ -1,4 +1,8 @@
 ext {
+    lib = [
+            groupId   : 'me.xujichang.lib',
+            artifactId: 'xutil'
+    ]
     pkg = [
             desc   : '开发过程中的工具类',
             site   : 'https://github.com/xujichang/Utils',

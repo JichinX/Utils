@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import me.xujichang.util.R;
 import me.xujichang.util.base.SuperPresenter;
 import me.xujichang.util.bean.AppInfo;
 import me.xujichang.util.tool.LogTool;
@@ -38,10 +39,12 @@ import me.xujichang.util.tool.SnackBarTool;
  *         Created by xjc on 2017/5/23.
  */
 public abstract class SuperActivity extends SuperActionBarActivity implements View.OnClickListener {
-
+    /**
+     * 错误提示Dialog
+     */
     private MaterialDialog errorDialog;
     private MaterialDialog warningDialog;
-    private ProgressDialog progressDialog;
+    private MaterialDialog progressDialog;
     private int requestNum = 0;
     private long startTime = 0;
     private SuperPresenter cachePresenter;
@@ -112,8 +115,12 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
             return;
         }
         if (requestNum == 0) {
-            progressDialog = ProgressDialog.show(this, null, msg);
+            progressDialog = new MaterialDialog
+                    .Builder(this)
+                    .
+                    .build();
         } else {
+            //直接更改提示信息
             progressDialog.setMessage(msg);
         }
         requestNum++;
@@ -202,39 +209,72 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
     }
 
     //=====================================dialog===================================================
+    public void showWarningDialog(@NonNull String msg) {
+        showWarningDialog(msg, null);
+    }
 
     public void showWarningDialog(@NonNull String msg,
                                   MaterialDialog.SingleButtonCallback callback) {
-        new MaterialDialog.Builder(this)
+        if (isFinishing()) {
+            return;
+        }
+        if (null != warningDialog) {
+            String temp = warningDialog.getContentView().getText().toString();
+            warningDialog.setContent(new StringBuilder(temp).append(",").append(msg));
+            return;
+        }
+        warningDialog = new MaterialDialog.Builder(this)
                 .title("警告")
+                .iconRes(R.drawable.ic_warning_yellow)
                 .content(msg)
                 .positiveText("确定")
                 .negativeText("取消")
                 .onPositive(callback)
+                .onNegative(callback)
                 .cancelable(false)
-                .build()
-                .show();
+                .dismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        warningDialog = null;
+                    }
+                })
+                .build();
+        warningDialog.show();
+
     }
 
+    @Deprecated
     protected void createErrorDialog(String msg) {
-        stopLoading();
         createErrorDialog(msg, null);
     }
 
+    @Deprecated
     protected void createErrorDialog(String msg, MaterialDialog.SingleButtonCallback callback) {
+        showErrorDialog(msg, callback);
+    }
+
+    protected void showErrorDialog(String msg) {
+        showErrorDialog(msg, null);
+    }
+
+    protected void showErrorDialog(String msg, MaterialDialog.SingleButtonCallback callback) {
+        stopLoading();
         if (isFinishing()) {
             return;
         }
         if (TextUtils.isEmpty(msg)) {
-            msg = "未知错误";
+            msg = "此错误未知";
         }
+        //错误叠加
         if (null != errorDialog) {
             String temp = errorDialog.getContentView().getText().toString();
             errorDialog.setContent(new StringBuilder(temp).append(",").append(msg));
             return;
         }
-        errorDialog = new MaterialDialog.Builder(this)
-                .title("Error")
+        errorDialog = new MaterialDialog
+                .Builder(this)
+                .iconRes(R.drawable.ic_error_red)
+                .title("发生错误")
                 .content(msg)
                 .positiveText("确定")
                 .onPositive(callback)
@@ -247,7 +287,6 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
                 })
                 .build();
         errorDialog.show();
-
     }
 
     //=======================================ActionBar==============================================
