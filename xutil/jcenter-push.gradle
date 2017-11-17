@@ -118,7 +118,7 @@ uploadArchives {
         mavenDeployer {
             String selfPath = "/Volumes/SdCard/Development/maven"
             repository(url: "file://" + selfPath)
-            pom.version = '1.0.3'
+            pom.version = '1.0.4'
             pom.groupId = 'me.xujichang.lib'
             pom.artifactId = 'xutil'
             pom.project {

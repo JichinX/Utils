@@ -1,7 +1,15 @@
 package me.xujichang.utils;
 
+import android.app.ActivityManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
+import java.util.List;
+
+import me.xujichang.util.tool.LogTool;
+
+import static android.app.ActivityManager.RECENT_IGNORE_UNAVAILABLE;
+import static android.app.ActivityManager.RECENT_WITH_EXCLUDED;
 
 /**
  * des:
@@ -27,12 +35,14 @@ public class TestActivity extends BaseActivity {
 
     @Override
     protected void onErrorTipClick() {
-        startLoading("哈喽哈喽");
-    }
+        //获取Activity栈信息
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        if (null != activityManager) {
+            List<ActivityManager.RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
+            List<ActivityManager.RecentTaskInfo> taskInfos = activityManager.getRecentTasks(10, RECENT_WITH_EXCLUDED);
+            List<ActivityManager.RecentTaskInfo> recentTaskInfos = activityManager.getRecentTasks(10, RECENT_IGNORE_UNAVAILABLE);
+            LogTool.d(taskInfos.size() + "  " + recentTaskInfos.size());
+        }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        stopLoading();
     }
 }

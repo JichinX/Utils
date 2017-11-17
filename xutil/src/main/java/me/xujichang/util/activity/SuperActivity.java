@@ -1,6 +1,6 @@
 package me.xujichang.util.activity;
 
-import android.app.ProgressDialog;
+import android.app.ActivityManager;
 import android.arch.lifecycle.Lifecycle.State;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,15 +38,30 @@ import me.xujichang.util.tool.SnackBarTool;
  * @author xjc
  *         Created by xjc on 2017/5/23.
  */
-public abstract class SuperActivity extends SuperActionBarActivity implements View.OnClickListener {
+public abstract class SuperActivity extends SuperActionBarActivity {
     /**
      * 错误提示Dialog
      */
     private MaterialDialog errorDialog;
+    /**
+     * 警告提示
+     */
     private MaterialDialog warningDialog;
+    /**
+     * 加载进度
+     */
     private MaterialDialog progressDialog;
-    private int requestNum = 0;
+    /**
+     * Loading的请求数量
+     */
+    private static int requestNum = 0;
+    /**
+     * 时间
+     */
     private long startTime = 0;
+    /**
+     * 网络请求 Presenter
+     */
     private SuperPresenter cachePresenter;
 
     public SuperPresenter getCachePresenter() {
@@ -60,6 +75,7 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //调用Destroy方法 停止网络请求 或返回数据
         if (null != cachePresenter) {
             cachePresenter.destroy();
         }
@@ -67,11 +83,12 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
 
     @Override
     public void onBackPressed() {
-        String className = getClass().getSimpleName();
         if (hideSoftKeyBoard() || hideKeyBoardForDialog()) {
+            //首先关闭 输入法
             return;
         }
-        if (getMainActivityName().equals(className)) {
+        //判断是否是首页（Activity栈底）
+        if (isAppBaseActivity()) {
             long currentTime = System.currentTimeMillis();
             if (currentTime - startTime > getActivityExitDuration()) {
                 showToastWithAction("再次点击将退出程序", new View.OnClickListener() {
@@ -88,14 +105,51 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
             }
             return;
         }
-        onParentBackPressed();
+        super.onBackPressed();
     }
 
+    private boolean isAppBaseActivity() {
+        String className = getClass().getName();
+        return className.equals(getAppBaseActivity());
+    }
 
+    private String getAppBaseActivity() {
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        if (null != activityManager) {
+            return activityManager.getRunningTasks(1).get(0).baseActivity.getClassName();
+        }
+        return null;
+    }
+
+    private boolean isAppTopActivity() {
+        String className = getClass().getSimpleName();
+        return className.equals(getAppBaseActivity());
+    }
+
+    private String getAppTopActivity() {
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        if (null != activityManager) {
+            return activityManager.getRunningTasks(1).get(0).topActivity.getShortClassName();
+        }
+        return null;
+    }
+
+    /**
+     * 关闭Dialog上的输入法
+     * TODO 暂未找到合适的方法
+     *
+     * @return
+     */
     public boolean hideKeyBoardForDialog() {
         return false;
     }
 
+    /**
+     * 关闭输入法
+     *
+     * @return true 表示  有输入法打开 并成功关闭
+     * false 表示 没有打开的输入法
+     */
     public boolean hideSoftKeyBoard() {
         boolean closed = false;
         InputMethodManager methodManager = (InputMethodManager) getSystemService(
@@ -107,6 +161,11 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
         return closed;
     }
 
+    /**
+     * 开启Loading
+     *
+     * @param msg
+     */
     public void startLoading(String msg) {
         if (TextUtils.isEmpty(msg)) {
             msg = "加载中...";
@@ -117,25 +176,35 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
         if (requestNum == 0) {
             progressDialog = new MaterialDialog
                     .Builder(this)
-                    .
+                    .content(msg)
+                    .cancelable(false)
+                    .progress(true, 100)
                     .build();
+            progressDialog.show();
         } else {
             //直接更改提示信息
-            progressDialog.setMessage(msg);
+            progressDialog.setContent(msg);
         }
         requestNum++;
-        LogTool.d("==============requestNum:" + requestNum);
+        LogTool.d("==============loading start======:" + requestNum);
     }
 
+    /**
+     * 停止Loading
+     */
     public void stopLoading() {
+        LogTool.d("==============loading stop 1. ======:" + requestNum);
+        if (requestNum <= 0) {
+            requestNum = 0;
+            return;
+        }
         requestNum--;
-        LogTool.d("==============requestNum:" + requestNum);
+        LogTool.d("==============loading stop 2. ======:" + requestNum);
         if (requestNum > 0) {
             return;
         }
-        if (null == progressDialog || requestNum < 0) {
-            requestNum = 0;
-        }
+        LogTool.d("==============loading stop 3. ======:end");
+        //requestNum ==0
         if (null != progressDialog) {
             progressDialog.dismiss();
             progressDialog = null;
@@ -147,27 +216,25 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
         showToast(getSuperRoot(), msg);
     }
 
+    public void showToast(View view, String msg) {
+        showToastWithAction(view, msg, null);
+    }
+
+    public void showToast(String msg, View.OnClickListener listener) {
+        showToastWithAction(getSuperRoot(), msg, listener);
+    }
+
     public void showToastWithAction(View view, String msg, View.OnClickListener listener) {
         showToastWithAction(view, msg, listener, "action");
     }
 
-    public void showToastWithAction(View view, String msg, View.OnClickListener listener,
-                                    String actionstr) {
-        SnackBarTool.getInstance().showToastWithAction(view, msg).action(actionstr, listener)
-                .cancel(true).show();
-    }
-
-    public void showToastWithAction(View view, String msg, View.OnClickListener listener,
-                                    String actionstr, boolean cancel) {
-        if (!cancel) {
-            msg = msg + "(右滑删除此消息)";
-        }
-        SnackBarTool.getInstance().showToastWithAction(view, msg).action(actionstr, listener)
-                .cancel(cancel).show();
-    }
-
     public void showToastWithAction(String msg, View.OnClickListener listener, String actionstr) {
         showToastWithAction(getSuperRoot(), msg, listener, actionstr);
+    }
+
+    public void showToastWithAction(View view, String msg, View.OnClickListener listener,
+                                    String actionstr) {
+        showToastWithAction(view, msg, listener, actionstr, true);
     }
 
     public void showToastWithAction(String msg, View.OnClickListener listener, String actionstr,
@@ -175,16 +242,21 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
         showToastWithAction(getSuperRoot(), msg, listener, actionstr, cancel);
     }
 
-    public void showToast(String msg, View.OnClickListener listener) {
-        showToastWithAction(getSuperRoot(), msg, listener);
-    }
-
-    public void showToast(View view, String msg) {
-        showToastWithAction(view, msg, null);
+    public void showToastWithAction(View view, String msg, View.OnClickListener listener,
+                                    String actionstr, boolean cancel) {
+        if (!cancel) {
+            msg = msg + "(右滑删除此消息)";
+        }
+        SnackBarTool
+                .getInstance()
+                .showToastWithAction(view, msg)
+                .action(actionstr, listener)
+                .cancel(cancel)
+                .show();
     }
 
     public void loadingError(String msg) {
-        createErrorDialog(msg);
+        showErrorDialog(msg);
     }
 
 
@@ -204,7 +276,7 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
         if (resolveInfoList.size() > 0) {
             startActivity(intent);
         } else {
-            createErrorDialog("目标 " + activityName + "不存在", null);
+            showErrorDialog("目标 " + activityName + "不存在", null);
         }
     }
 
@@ -245,7 +317,7 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
 
     @Deprecated
     protected void createErrorDialog(String msg) {
-        createErrorDialog(msg, null);
+        showErrorDialog(msg, null);
     }
 
     @Deprecated
@@ -405,8 +477,4 @@ public abstract class SuperActivity extends SuperActionBarActivity implements Vi
      * @return 类的名称
      */
     protected abstract String getMainActivityName();
-
-    protected void onParentBackPressed() {
-        super.onBackPressed();
-    }
 }

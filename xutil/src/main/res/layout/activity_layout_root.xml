@@ -84,7 +84,7 @@
         </FrameLayout>
         <!--提示信息-->
         <LinearLayout
-            android:id="@+id/ll_error_float_tip"
+            android:id="@+id/ll_error_float_container"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:background="@color/material_textBlack_secondaryText"

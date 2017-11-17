@@ -85,17 +85,17 @@ public class SuperActionBarActivity extends AppCompatActivity implements View.On
         //获取控件
         root = (ViewGroup) findViewById(R.id.activity_layout_root);
         actionBar = (LinearLayout) findViewById(R.id.activity_actionbar);
+        mStatusBar = findViewById(R.id.status_bar);
         actionbarRightImg = (ImageView) actionBar.findViewById(R.id.actionbar_right_img);
         actionbarRightText = (TextView) actionBar.findViewById(R.id.actionbar_right_text);
         actionbarTitle = (TextView) actionBar.findViewById(R.id.actionbar_title);
         actionbarLeftText = (TextView) actionBar.findViewById(R.id.actionbar_left_text);
         actionbarLeftImg = (ImageView) actionBar.findViewById(R.id.actionbar_left_img);
-        mStatusBar = findViewById(R.id.status_bar);
+        mIvErrorTypeImg = (ImageView) findViewById(R.id.iv_error_type_img);
+        mTvErrorMsg = (TextView) findViewById(R.id.tv_error_msg);
+        mIvErrorToRepair = (ImageView) findViewById(R.id.iv_error_to_repair);
+        mLlErrorFloatTip = (LinearLayout) findViewById(R.id.ll_error_float_container);
 
-        mLlErrorFloatTip = findViewById(R.id.ll_error_float_tip);
-        mIvErrorTypeImg = findViewById(R.id.iv_error_type_img);
-        mTvErrorMsg = findViewById(R.id.tv_error_msg);
-        mIvErrorToRepair = findViewById(R.id.iv_error_to_repair);
         LogTool.d("获取完控件");
     }
 
@@ -441,7 +441,7 @@ public class SuperActionBarActivity extends AppCompatActivity implements View.On
             onRightAreaClick();
         } else if (id == R.id.actionbar_title) {
             onTitleClick();
-        } else if (id == R.id.ll_error_float_tip) {
+        } else if (id == R.id.ll_error_float_container) {
             onErrorTipClick();
         }
     }
