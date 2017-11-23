@@ -81,20 +81,20 @@ public class SuperActionBarActivity extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.setContentView(R.layout.activity_layout_root);
+        super.setContentView(R.layout.activity_root);
         //获取控件
-        root = (ViewGroup) findViewById(R.id.activity_layout_root);
-        actionBar = (LinearLayout) findViewById(R.id.activity_actionbar);
+        root = (ViewGroup) findViewById(R.id.activity_layout_container);
+        mLlErrorFloatTip = (LinearLayout) findViewById(R.id.ll_error_float_container);
+        actionBar = (LinearLayout) findViewById(R.id.activity_actionbar_container);
         mStatusBar = findViewById(R.id.status_bar);
         actionbarRightImg = (ImageView) actionBar.findViewById(R.id.actionbar_right_img);
         actionbarRightText = (TextView) actionBar.findViewById(R.id.actionbar_right_text);
         actionbarTitle = (TextView) actionBar.findViewById(R.id.actionbar_title);
         actionbarLeftText = (TextView) actionBar.findViewById(R.id.actionbar_left_text);
         actionbarLeftImg = (ImageView) actionBar.findViewById(R.id.actionbar_left_img);
-        mIvErrorTypeImg = (ImageView) findViewById(R.id.iv_error_type_img);
-        mTvErrorMsg = (TextView) findViewById(R.id.tv_error_msg);
-        mIvErrorToRepair = (ImageView) findViewById(R.id.iv_error_to_repair);
-        mLlErrorFloatTip = (LinearLayout) findViewById(R.id.ll_error_float_container);
+        mIvErrorTypeImg = (ImageView) mLlErrorFloatTip.findViewById(R.id.iv_error_type_img);
+        mTvErrorMsg = (TextView) mLlErrorFloatTip.findViewById(R.id.tv_error_msg);
+        mIvErrorToRepair = (ImageView) mLlErrorFloatTip.findViewById(R.id.iv_error_to_repair);
 
         LogTool.d("获取完控件");
     }

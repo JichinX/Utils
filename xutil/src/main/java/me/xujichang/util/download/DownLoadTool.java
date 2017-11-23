@@ -181,7 +181,7 @@ public class DownLoadTool {
         MDButton negativeButton =
                 progressDialog.getActionButton(DialogAction.NEGATIVE);
 
-        if (FILE_APK.endsWith(fileName)) {
+        if (fileName.endsWith(FILE_APK)) {
             positiveButton.setVisibility(View.VISIBLE);
             positiveButton.setText("安装");
             positiveButton.setOnClickListener(new View.OnClickListener() {

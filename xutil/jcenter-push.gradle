@@ -3,7 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = 'me.xujichang.lib'
-version = '1.0.3'
+version = '1.0.4'
 def packageName = "xutil"
 def pomConfig = {
     licenses {
@@ -118,7 +118,7 @@ uploadArchives {
         mavenDeployer {
             String selfPath = "/Volumes/SdCard/Development/maven"
             repository(url: "file://" + selfPath)
-            pom.version = '1.0.4'
+            pom.version = '1.0.5'
             pom.groupId = 'me.xujichang.lib'
             pom.artifactId = 'xutil'
             pom.project {
