@@ -3,7 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = 'me.xujichang.lib'
-version = '1.0.4'
+version = '1.0.6'
 def packageName = "xutil"
 def pomConfig = {
     licenses {
@@ -29,6 +29,7 @@ task sourcesJar(type: Jar) {
 }
 
 task javadoc(type: Javadoc) {
+    failOnError = false
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
@@ -118,7 +119,7 @@ uploadArchives {
         mavenDeployer {
             String selfPath = "/Volumes/SdCard/Development/maven"
             repository(url: "file://" + selfPath)
-            pom.version = '1.0.5'
+            pom.version = '1.0.7'
             pom.groupId = 'me.xujichang.lib'
             pom.artifactId = 'xutil'
             pom.project {

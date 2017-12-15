@@ -18,13 +18,12 @@ import me.xujichang.util.simple.interfaces.AvoidShake;
  */
 
 public class SimpleAvoidShake implements AvoidShake {
-    @Deprecated
-    public <T extends View> void proxyClickListener(final T view, final XOnClickListener<T> listener, long seconds) {
+    public <T extends View> void proxyClickListener(final T view, final me.xujichang.util.simple.interfaces.XOnClickListener<T> listener, long seconds) {
         proxyClickListener(seconds, view, listener);
     }
 
     public <T extends View> void proxyClickListener(final T view,
-                                                    final XOnClickListener<T> listener) {
+                                                    final me.xujichang.util.simple.interfaces.XOnClickListener<T> listener) {
         proxyClickListener(view, listener, 500);
     }
 
@@ -56,8 +55,7 @@ public class SimpleAvoidShake implements AvoidShake {
                 .subscribe(observer);
     }
 
-    abstract static class XObservableOnSubscribe<T extends View>
-            implements ObservableOnSubscribe<T> {
+    abstract static class XObservableOnSubscribe<T extends View> implements ObservableOnSubscribe<T> {
 
         private T view;
 

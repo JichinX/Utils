@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.text.TextUtils;
@@ -76,13 +77,19 @@ public class SuperActionBarActivity extends AppCompatActivity implements View.On
      * error 提示布局
      */
     private LinearLayout mLlErrorFloatTip;
+    /**
+     * 状态栏
+     */
     private LinearLayout mStatusBar;
+
+    private ConstraintLayout mRootContainer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_root);
         //获取控件
+        mRootContainer = findViewById(R.id.root_layout_container);
         root = (ViewGroup) findViewById(R.id.activity_layout_container);
         mLlErrorFloatTip = (LinearLayout) findViewById(R.id.ll_error_float_container);
         actionBar = (LinearLayout) findViewById(R.id.activity_actionbar_container);
@@ -323,6 +330,10 @@ public class SuperActionBarActivity extends AppCompatActivity implements View.On
 
     protected ViewGroup getSuperRoot() {
         return root;
+    }
+
+    protected ViewGroup getSuperRootContainer() {
+        return mRootContainer;
     }
 
     protected boolean isActionBarShow() {

@@ -23,4 +23,8 @@ public class ViewHolderWithAvoidShake extends RecyclerView.ViewHolder {
     public <T extends View> void proxyClickListener(long seconds, T view, XOnClickListener<T> listener) {
         mSimpleAvoidShake.proxyClickListener(seconds, view, listener);
     }
+
+    public <T extends View> void proxyClickListener(T view, XOnClickListener<T> listener) {
+        mSimpleAvoidShake.proxyClickListener(view, listener);
+    }
 }
