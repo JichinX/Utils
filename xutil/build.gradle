@@ -1,11 +1,10 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 100
         versionName "1.0.0"
     }
@@ -23,25 +22,28 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    compileOnly 'com.android.support:support-v13:26.1.0'
-    compileOnly 'com.android.support:support-vector-drawable:26.1.0'
-    compileOnly 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    compileOnly 'com.android.support:support-v13:27.1.1'
+    compileOnly 'com.android.support:support-vector-drawable:27.1.1'
+    compileOnly 'com.android.support:appcompat-v7:27.1.1'
     //design
-    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:design:27.1.1'
     //RxJava
     implementation 'io.reactivex.rxjava2:rxjava:2.1.6'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.2.0'
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     //material Dialog
-    implementation 'com.afollestad.material-dialogs:commons:0.9.4.5'
-    implementation 'com.android.support:palette-v7:26.1.0'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    //    implementation 'com.afollestad.material-dialogs:commons:0.9.4.5'
+    implementation 'com.android.support:palette-v7:27.1.1'
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    implementation 'com.google.guava:guava:25.1-android'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 }
 apply from: 'jcenter-push.gradle'
 //apply from: 'bintray-push.gradle'

@@ -1,6 +1,5 @@
 package me.xujichang.util.activity;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.text.TextUtils;
@@ -77,12 +75,8 @@ public class SuperActionBarActivity extends AppCompatActivity implements View.On
      * error 提示布局
      */
     private LinearLayout mLlErrorFloatTip;
-    /**
-     * 状态栏
-     */
-    private LinearLayout mStatusBar;
 
-    private ConstraintLayout mRootContainer;
+    private ViewGroup mRootContainer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,7 +87,6 @@ public class SuperActionBarActivity extends AppCompatActivity implements View.On
         root = (ViewGroup) findViewById(R.id.activity_layout_container);
         mLlErrorFloatTip = (LinearLayout) findViewById(R.id.ll_error_float_container);
         actionBar = (LinearLayout) findViewById(R.id.activity_actionbar_container);
-        mStatusBar = findViewById(R.id.status_bar);
         actionbarRightImg = (ImageView) actionBar.findViewById(R.id.actionbar_right_img);
         actionbarRightText = (TextView) actionBar.findViewById(R.id.actionbar_right_text);
         actionbarTitle = (TextView) actionBar.findViewById(R.id.actionbar_title);
@@ -102,8 +95,6 @@ public class SuperActionBarActivity extends AppCompatActivity implements View.On
         mIvErrorTypeImg = (ImageView) mLlErrorFloatTip.findViewById(R.id.iv_error_type_img);
         mTvErrorMsg = (TextView) mLlErrorFloatTip.findViewById(R.id.tv_error_msg);
         mIvErrorToRepair = (ImageView) mLlErrorFloatTip.findViewById(R.id.iv_error_to_repair);
-
-        LogTool.d("获取完控件");
     }
 
     @Override
@@ -148,28 +139,21 @@ public class SuperActionBarActivity extends AppCompatActivity implements View.On
         if (version < Build.VERSION_CODES.KITKAT) {
             return;
         }
-        ColorDrawable colorDrawable = new ColorDrawable(color);
-        colorDrawable.setAlpha(230);
-        int barcolor = colorDrawable.getColor();
-        actionBar.setBackgroundColor(barcolor);
-        colorDrawable = null;
-        //大于4.4  小于5.0
-        if (version < Build.VERSION_CODES.LOLLIPOP) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            int height = getStatusBarHeight(this);
-            LogTool.d("原来的高度：" + mStatusBar.getLayoutParams().height);
-            ViewGroup.LayoutParams params = mStatusBar.getLayoutParams();
-            params.height = height;
-            mStatusBar.setLayoutParams(params);
-            //设置一个状态栏
-            mStatusBar.setVisibility(View.VISIBLE);
-            mStatusBar.setBackgroundColor(color);
-            LogTool.d("后来的高度：" + mStatusBar.getLayoutParams().height);
-            //设置一个半透明效果，Material Design的效果
-        } else {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(color);
+        } else {
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            ViewGroup systemContent = findViewById(android.R.id.content);
+
+            View statusBarView = new View(this);
+            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight());
+            statusBarView.setBackgroundColor(color);
+
+            systemContent.getChildAt(0).setFitsSystemWindows(true);
+
+            systemContent.addView(statusBarView, 0, lp);
+
         }
     }
 
@@ -177,11 +161,11 @@ public class SuperActionBarActivity extends AppCompatActivity implements View.On
     /**
      * 获取状态栏高度
      */
-    public static int getStatusBarHeight(Context context) {
+    public int getStatusBarHeight() {
         int result = 0;
-        int resId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int resId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resId > 0) {
-            result = context.getResources().getDimensionPixelSize(resId);
+            result = getResources().getDimensionPixelSize(resId);
         }
         return result;
     }

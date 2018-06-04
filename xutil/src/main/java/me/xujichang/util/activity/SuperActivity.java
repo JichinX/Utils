@@ -38,7 +38,7 @@ import me.xujichang.util.tool.SnackBarTool;
  * 包含 Loading Dialog 权限申请 ActionBar等
  *
  * @author xjc
- *         Created by xjc on 2017/5/23.
+ * Created by xjc on 2017/5/23.
  */
 public abstract class SuperActivity extends SuperActionBarActivity {
     /**
@@ -101,18 +101,24 @@ public abstract class SuperActivity extends SuperActionBarActivity {
                 showToastWithAction("再次点击将退出程序", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        onAppExit();
                         finish();
                         System.gc();
                     }
                 }, "退出");
                 startTime = currentTime;
             } else {
+                onAppExit();
                 finish();
                 System.gc();
             }
             return;
         }
         super.onBackPressed();
+    }
+
+    protected void onAppExit() {
+
     }
 
     private boolean isAppBaseActivity() {
@@ -478,10 +484,7 @@ public abstract class SuperActivity extends SuperActionBarActivity {
      */
     protected abstract long getActivityExitDuration();
 
-    /**
-     * 首页 类名字
-     *
-     * @return 类的名称
-     */
-    protected abstract String getMainActivityName();
+    protected void onParentBackPressed() {
+        super.onBackPressed();
+    }
 }

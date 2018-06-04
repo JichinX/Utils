@@ -38,7 +38,7 @@ import okhttp3.ResponseBody;
  * 下载管理
  *
  * @author xjc
- *         Created by xjc on 2017/5/25.
+ * Created by xjc on 2017/5/25.
  */
 
 public class DownLoadTool {
@@ -440,7 +440,7 @@ public class DownLoadTool {
         Uri uri = null;
         //适配Android N
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(context, "android.support.v4.content.fileprovider",
+            uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider",
                     file);
         } else {
             uri = Uri.fromFile(file);

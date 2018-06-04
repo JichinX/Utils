@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import me.xujichang.util.tool.LogTool;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -20,6 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * 对Retrofit做进一步封装，请求时 更方便
+ *
  * @author xjc
  * Created by xujichang on 2017/4/13.
  */
@@ -39,6 +41,14 @@ public class RetrofitManager {
     private static String BASE_URL;
     private int tokenPos;
     private HashMap<String, String> extendUrls;
+    /**
+     * Cookie值
+     */
+    private String cookies;
+    /**
+     * cookies对应的key
+     */
+    private String cookieKey;
 
     protected RetrofitManager(String pS) {
 
@@ -72,6 +82,7 @@ public class RetrofitManager {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.addInterceptor(new RequestCheckIntercept());
+        builder.addInterceptor(new CookieIntercept());
         //添加日志打印
         builder.addInterceptor(loggingInterceptor);
 
@@ -101,6 +112,10 @@ public class RetrofitManager {
 
     public void refreshToken(String newToken) {
         token = newToken;
+    }
+
+    public void refreshCookie(String cookie) {
+        cookies = cookie;
     }
 
     /**
@@ -219,7 +234,8 @@ public class RetrofitManager {
     }
 
     public static class Builder {
-
+        private String cookieKey = "Cookie";
+        private String cookie;
         private String baseUrl;
         private String token;
         private String tokenKey = "token";
@@ -259,6 +275,17 @@ public class RetrofitManager {
             return this;
         }
 
+        public Builder cookie(String cookie) {
+            this.cookie = cookie;
+            return this;
+        }
+
+        public Builder cookie(String cookieKey, String cookie) {
+            this.cookie = cookie;
+            this.cookieKey = cookieKey;
+            return this;
+        }
+
         public Builder addExtendUrl(String tag, String url) {
             if (extendUrlMap.containsKey(tag)) {
                 throw new RuntimeException("the key is already in Map");
@@ -284,7 +311,32 @@ public class RetrofitManager {
         tokenKey = builder.tokenKey;
         tokenPos = builder.tokenPos;
         extendUrls = builder.extendUrlMap;
+        cookieKey = builder.cookieKey;
+        cookies = builder.cookie;
     }
 
+    private class CookieIntercept implements Interceptor {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request.Builder builder = chain.request().newBuilder();
+            //添加cookie
+            if (!TextUtils.isEmpty(cookies)) {
+                builder.addHeader(cookieKey, cookies);
+            }
+            Response response = chain.proceed(builder.build());
+            //取Cookie
+            if (!response.headers("Set-Cookie").isEmpty()) {
+                StringBuilder strBuilder = new StringBuilder();
+                //取cookie
+                for (String cookie : response.headers("Set-Cookie")) {
+                    String[] value = cookie.split(";");
+                    strBuilder.append(value[0]).append(";");
+                }
+                cookies = strBuilder.toString();
+                LogTool.d("Get Cookie[" + cookies + "]");
+            }
+            return response;
+        }
+    }
 }
 

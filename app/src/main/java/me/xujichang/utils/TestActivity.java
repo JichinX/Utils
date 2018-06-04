@@ -30,7 +30,7 @@ public class TestActivity extends BaseActivity {
         setRightText("哈哈");
         setActionBarTitle("测试测试测试测试测试测试测试测试测试测试测试");
         setLeftText("哈哈");
-        showErrorTip("网络错误", true);
+//        showErrorTip("网络错误", true);
     }
 
     @Override

@@ -3,8 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white" />
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:text="hahhaahah" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="qwewqeeqeqeqw" />
+        </LinearLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>
