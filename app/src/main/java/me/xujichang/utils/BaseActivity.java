@@ -13,10 +13,4 @@ public abstract class BaseActivity extends SuperActivity {
     protected long getActivityExitDuration() {
         return 1000;
     }
-
-    @Override
-    protected String getMainActivityName() {
-        return "MainActivity";
-    }
-
 }

@@ -27,7 +27,7 @@ import me.xujichang.util.tool.LogTool;
  * des:最基本布局 包括 ActionBar statusBar errorTip
  *
  * @author xjc
- *         Created by xjc on 2017/6/23.
+ * Created by xjc on 2017/6/23.
  */
 
 public class SuperActionBarActivity extends AppCompatActivity implements View.OnClickListener {
@@ -140,9 +140,11 @@ public class SuperActionBarActivity extends AppCompatActivity implements View.On
             return;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //>=21
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(color);
         } else {
+            //>=19 <21
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             ViewGroup systemContent = findViewById(android.R.id.content);
 
@@ -439,5 +441,28 @@ public class SuperActionBarActivity extends AppCompatActivity implements View.On
         } else if (id == R.id.ll_error_float_container) {
             onErrorTipClick();
         }
+    }
+
+    /**
+     * ==================================获取属性====================================================
+     */
+    protected TextView getActionbarTitle() {
+        return actionbarTitle;
+    }
+
+    public ImageView getActionbarLeftImg() {
+        return actionbarLeftImg;
+    }
+
+    public TextView getActionbarLeftText() {
+        return actionbarLeftText;
+    }
+
+    public ImageView getActionbarRightImg() {
+        return actionbarRightImg;
+    }
+
+    public TextView getActionbarRightText() {
+        return actionbarRightText;
     }
 }

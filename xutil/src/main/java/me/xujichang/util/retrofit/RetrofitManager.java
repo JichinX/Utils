@@ -20,6 +20,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
+ * TODO  需重新封装
  * 对Retrofit做进一步封装，请求时 更方便
  *
  * @author xjc
@@ -49,10 +50,6 @@ public class RetrofitManager {
      * cookies对应的key
      */
     private String cookieKey;
-
-    protected RetrofitManager(String pS) {
-
-    }
 
     public static RetrofitManager getOurInstance() {
         if (null == ourInstance) {
@@ -87,9 +84,9 @@ public class RetrofitManager {
         builder.addInterceptor(loggingInterceptor);
 
         //连接超时 时间
-        builder.connectTimeout(15, TimeUnit.SECONDS);
-        builder.readTimeout(50, TimeUnit.SECONDS);
-        builder.writeTimeout(50, TimeUnit.SECONDS);
+        builder.connectTimeout(30, TimeUnit.SECONDS);
+        builder.readTimeout(120, TimeUnit.SECONDS);
+        builder.writeTimeout(90, TimeUnit.SECONDS);
         //重试
         builder.retryOnConnectionFailure(true);
 
@@ -108,6 +105,10 @@ public class RetrofitManager {
 
     private RetrofitManager() {
         initRetrofit();
+    }
+
+    protected RetrofitManager(String vo) {
+        this();
     }
 
     public void refreshToken(String newToken) {
@@ -129,9 +130,9 @@ public class RetrofitManager {
         //添加日志打印
         builder.addInterceptor(loggingInterceptor);
         //连接超时 时间
-        builder.connectTimeout(15, TimeUnit.SECONDS);
-        builder.readTimeout(50, TimeUnit.SECONDS);
-        builder.writeTimeout(50, TimeUnit.SECONDS);
+        builder.connectTimeout(30, TimeUnit.SECONDS);
+        builder.readTimeout(120, TimeUnit.SECONDS);
+        builder.writeTimeout(90, TimeUnit.SECONDS);
         //重试
         builder.retryOnConnectionFailure(true);
 
@@ -171,6 +172,7 @@ public class RetrofitManager {
         Request.Builder requestBuilder = request.newBuilder();
         HttpUrl.Builder urlBuilder = request.url().newBuilder();
         Headers.Builder headersBuilder = request.headers().newBuilder();
+        headersBuilder.set("Connection", "close");
         //处理Token
         if (!TextUtils.isEmpty(token)) {
             //如果不存在Token
@@ -234,6 +236,18 @@ public class RetrofitManager {
     }
 
     public static class Builder {
+        /**
+         * 连接超时时间
+         */
+        private int connectTimeOut = 30;
+        /**
+         * 读取超时时间
+         */
+        private int readTimeOut = 120;
+        /**
+         * 写数据超时时间
+         */
+        private int writeTimeOut = 90;
         private String cookieKey = "Cookie";
         private String cookie;
         private String baseUrl;
@@ -283,6 +297,21 @@ public class RetrofitManager {
         public Builder cookie(String cookieKey, String cookie) {
             this.cookie = cookie;
             this.cookieKey = cookieKey;
+            return this;
+        }
+
+        public Builder connectTimeOut(int time) {
+            connectTimeOut = time;
+            return this;
+        }
+
+        public Builder readTimeOut(int time) {
+            readTimeOut = time;
+            return this;
+        }
+
+        public Builder writeTimeOut(int time) {
+            writeTimeOut = time;
             return this;
         }
 

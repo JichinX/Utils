@@ -3,7 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = 'me.xujichang.lib'
-version = '1.0.7'
+version = '1.0.8.1'
 def packageName = "xutil"
 def pomConfig = {
     licenses {
@@ -60,29 +60,15 @@ publishing {
                 labels.add("api")
                 labels.add("implementation")
                 def dependenciesNode = root.appendNode("dependencies")
-                SortedMap<String, Configuration> map = configurations.asMap
-                map.keySet().each {
-                    if (labels.contains(it)) {
-                        Configuration configuration = map.get(it)
-                        configuration.allDependencies.each {
-                            if (null != it.group) {
-                                def dependencyNode = dependenciesNode.appendNode('dependency')
-                                dependencyNode.appendNode('groupId', it.group)
-                                dependencyNode.appendNode('artifactId', it.name)
-                                dependencyNode.appendNode('version', it.version)
-                                dependencyNode.appendNode('scope', "compile")
-                            }
-                        }
+                configurations.implementation.allDependencies.each {
+                    // Ensure dependencies such as fileTree are not included in the pom.
+                    if (it.name != 'unspecified') {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
                     }
                 }
-//                configurations.compile.allDependencies.each {//添加dependency
-//                    if (it.group != null) {
-//                        def dependencyNode = dependenciesNode.appendNode('dependency')
-//                        dependencyNode.appendNode('groupId', it.group)
-//                        dependencyNode.appendNode('artifactId', it.name)
-//                        dependencyNode.appendNode('version', it.version)
-//                    }
-//                }
                 root.children().last() + pomConfig
             }
         }
@@ -119,7 +105,7 @@ uploadArchives {
         mavenDeployer {
             String selfPath = "/Volumes/SdCard/Development/environment/.m2/localmaven"
             repository(url: "file://" + selfPath)
-            pom.version = '1.0.8'
+            pom.version = '1.0.8.1'
             pom.groupId = 'me.xujichang.lib'
             pom.artifactId = 'xutil'
             pom.project {
