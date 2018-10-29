@@ -1,0 +1,153 @@
+apply plugin: "com.github.dcendents.android-maven"
+apply plugin: "com.jfrog.bintray"
+apply plugin: 'maven-publish'
+//上传Maven
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: LOCAL_REPO_URL)
+        pom.groupId = GROUP_ID
+        pom.artifactId = project.name
+        pom.version = android.defaultConfig.versionName
+    }
+}
+//上传JCenter
+group = GROUP_ID
+version = android.defaultConfig.versionName
+def versionCode = android.defaultConfig.versionName
+def siteUrl = "https://gitee.com/Sir_XU/Modules"
+def gitUrl = "https://gitee.com/Sir_XU/Modules"
+def pomConfig = {
+    licenses {
+        license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+        }
+    }
+    developers {
+        developer {
+            id 'jcenter'
+            name 'xujichang'
+            email 'xujichang@outlook.com'
+        }
+    }
+    scm {
+        connection 'https://gitee.com/Sir_XU/Modules'
+        developerConnection 'https://gitee.com/Sir_XU/Modules'
+        url siteUrl
+    }
+}
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+//publishing {
+//    publications {
+//        Production(MavenPublication) {
+//            artifact sourcesJar
+//            artifact javadocJar
+////            artifact("$buildDir/outputs/aar/$project.name-release.aar")
+//            groupId group
+//            artifactId project.name
+//            version versionCode
+//
+//            pom.withXml {
+//                def root = asNode()
+//                root.appendNode('description', 'test')
+//                root.appendNode('name', 'test')
+//                root.appendNode('url', 'https://gitee.com/Sir_XU/Modules')
+//                def dependenciesNode = asNode().appendNode('dependencies')
+//
+//                // Iterate over the implementation dependencies (we don't want the test ones), adding a <dependency> node for each
+//                configurations.implementation.allDependencies.each {
+//                    // Ensure dependencies such as fileTree are not included in the pom.
+//                    if (it.name != 'unspecified') {
+//                        def dependencyNode = dependenciesNode.appendNode('dependency')
+//                        dependencyNode.appendNode('groupId', it.group)
+//                        dependencyNode.appendNode('artifactId', it.name)
+//                        dependencyNode.appendNode('version', it.version)
+//                    }
+//                }
+//                root.children().last() + pomConfig
+//            }
+//        }
+//    }
+//}
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+//    publications = ['Production']
+    override = true
+    pkg {
+        repo = 'modules'
+        name = project.name
+        desc = "Bintray aar publishing $project.name ${this.version} for myself"
+        websiteUrl = siteUrl
+        issueTrackerUrl = 'https://github.com/xujichang/JcenterTest/issues'
+        vcsUrl = gitUrl
+        licenses = ['Apache-2.0']
+        labels = ['aar', 'android', 'modules']
+        publicDownloadNumbers = true
+        publish = true
+//        dryRun = true
+        version {
+            name = versionCode
+            desc = "${project.name} - ${this.version}"
+            released = new Date()
+            vcsTag = versionCode
+            gpg {
+                sign = true
+                passphrase = properties.getProperty("bintray.gpg.password")
+            }
+        }
+    }
+}
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                name 'Bintray publish Gradle aar example'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'jcenter'
+                        name 'xujichang'
+                        email 'xujichang@outlook.com'
+                    }
+                }
+                scm {
+                    connection 'https://github.com/xujichang/JcenterTest.git'
+                    developerConnection 'https://github.com/xujichang/JcenterTest.git'
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    options.encoding "UTF-8"
+    options.charSet 'UTF-8'
+    failOnError = false
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}

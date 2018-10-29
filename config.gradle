@@ -29,4 +29,7 @@ ext {
             groupId   : '',
             artifactId: ''
     ]
+    LOCAL_REPO_URL = 'file:///Volumes/Dev/environment/maven/repository/local'
+    GROUP_ID = 'me.xujichang.lib'
+
 }

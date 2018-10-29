@@ -3,6 +3,7 @@ package me.xujichang.utils;
 import android.app.ActivityManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import java.util.List;
 
@@ -44,5 +45,15 @@ public class TestActivity extends BaseActivity {
             LogTool.d(taskInfos.size() + "  " + recentTaskInfos.size());
         }
 
+    }
+
+    /**
+     * 显示日志
+     *
+     * @param view
+     */
+    public void showLog(View view) {
+//        LogTool.e(new RuntimeException("Hello Error!"));
+        LogTool.d("Nothing!");
     }
 }
