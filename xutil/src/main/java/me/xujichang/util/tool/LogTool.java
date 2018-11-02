@@ -1,5 +1,7 @@
 package me.xujichang.util.tool;
 
+import android.app.Application;
+import android.content.pm.ApplicationInfo;
 import android.util.Log;
 
 import com.google.common.base.Strings;
@@ -14,6 +16,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import me.xujichang.util.BuildConfig;
+import me.xujichang.util.thirdparty.AppUtils;
 
 /**
  * 对日志作封装
@@ -40,7 +43,7 @@ import me.xujichang.util.BuildConfig;
 public class LogTool {
     private static final String CLASS_NAME = LogTool.class.getName();
 
-    private static final boolean isDeBug = BuildConfig.DEBUG;
+    private static boolean isDeBug = BuildConfig.DEBUG;
 
     //可选格式方式
 
@@ -516,5 +519,18 @@ public class LogTool {
             }
             return "";
         }
+    }
+
+    /**
+     * 设置是否是Debug
+     *
+     * @param pApplication
+     */
+    public static void syncIsDebug(Application pApplication) {
+        ApplicationInfo lApplicationInfo = pApplication.getApplicationInfo();
+        if (null == lApplicationInfo) {
+            return;
+        }
+        isDeBug = (lApplicationInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
     }
 }
