@@ -7,17 +7,18 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.4.0-rc02'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'digital.wup:android-maven-publish:3.6.2'
+//        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
 }
 
 allprojects {
     repositories {
-        maven {
-            url 'file:///Volumes/Dev/environment/maven/repository/local'
-        }
+//        maven {
+//            url 'file:///Volumes/Dev/environment/maven/repository/local'
+//        }
         jcenter()
         google()
     }
